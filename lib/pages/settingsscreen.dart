@@ -199,6 +199,7 @@ class SettingsScreen extends StatelessWidget {
         InkWell(
           onTap: () {
             Authservices().singout();
+
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(

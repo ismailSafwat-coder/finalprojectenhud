@@ -159,12 +159,14 @@ class _CustomFormState extends State<CustomForm> {
             children: [
               GestureDetector(
                 onTap: () async {
-                  Authservices().signinWithGoogle(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ));
+                  String res = await Authservices().signinWithGoogle(context);
+                  if (res == 'success') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ));
+                  }
                 },
                 child: Container(
                   decoration:

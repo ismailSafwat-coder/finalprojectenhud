@@ -47,14 +47,16 @@ class Authservices {
   }
 
   // Sign in with Google
-  Future<void> signinWithGoogle(BuildContext context) async {
+  Future<String> signinWithGoogle(BuildContext context) async {
+    String res = 'Some errors occurred';
     try {
+      await _googleSignIn.signOut();
       // Start the Google sign-in process
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
         // The user canceled the sign-in
-        return;
+        return 'Sign-in canceled by user';
       }
 
       // Obtain the auth details from the request
@@ -69,14 +71,18 @@ class Authservices {
 
       // Sign in to Firebase with the Google [UserCredential]
       await _firebaseAuth.signInWithCredential(credential);
+
+      // If everything is successful
+      res = 'success';
     } on FirebaseAuthException catch (e) {
-      // Handle error with Firebase authentication
-      _showErrorDialog(
-          context, e.message ?? 'An error occurred during Google Sign-In.');
+      res = e.message ?? 'An error occurred during Google Sign-In.';
+      _showErrorDialog(context, res);
     } catch (e) {
-      _showErrorDialog(context, e.toString());
+      res = e.toString();
+      _showErrorDialog(context, res);
       print(e.toString());
     }
+    return res;
   }
 
   // Sign up
@@ -112,6 +118,7 @@ class Authservices {
   //facebook
   Future<String> signInWithFacebook() async {
     try {
+      await FacebookAuth.instance.logOut();
       // Trigger the sign-in flow
       final LoginResult loginResult = await FacebookAuth.instance.login();
 

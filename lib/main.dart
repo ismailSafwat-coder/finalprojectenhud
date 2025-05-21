@@ -20,6 +20,7 @@ void main() async {
 
   //init notifications
   Notifications().initNotification();
+
   runApp(const MyApp());
 }
 
